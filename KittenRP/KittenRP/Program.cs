@@ -1,3 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿
+// Application
 
 Console.WriteLine("Hello, World!");
