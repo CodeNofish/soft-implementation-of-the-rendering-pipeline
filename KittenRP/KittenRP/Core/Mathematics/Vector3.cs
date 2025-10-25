@@ -1,8 +1,14 @@
-﻿namespace KittenRP;
+﻿using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using KittenRP.Core.Utilities;
+
+namespace KittenRP.Core.Mathematics;
 
 /// <summary>
 /// 三维向量
 /// </summary>
+[PublicAPI]
+[StructLayout(LayoutKind.Sequential)]
 public struct Vector3 : IEquatable<Vector3> {
   public float x;
   public float y;
@@ -91,9 +97,9 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 判断向量是否近似相等（考虑浮点误差）
   /// </summary>
   public static bool Approximately(Vector3 a, Vector3 b, float tolerance = 0.0001f) {
-    return Math.Abs(a.x - b.x) < tolerance &&
-           Math.Abs(a.y - b.y) < tolerance &&
-           Math.Abs(a.z - b.z) < tolerance;
+    return MathF.Abs(a.x - b.x) < tolerance &&
+           MathF.Abs(a.y - b.y) < tolerance &&
+           MathF.Abs(a.z - b.z) < tolerance;
   }
 
   #endregion
@@ -108,7 +114,7 @@ public struct Vector3 : IEquatable<Vector3> {
   /// <param name="b">结束点</param>
   /// <param name="t">插值系数 [0,1]</param>
   public static Vector3 Lerp(Vector3 a, Vector3 b, float t) {
-    t = Math.Max(0f, Math.Min(1f, t)); // 限制t在[0,1]范围内
+    t = MathF.Max(0f, MathF.Min(1f, t)); // 限制t在[0,1]范围内
     return new Vector3(
       a.x + (b.x - a.x) * t,
       a.y + (b.y - a.y) * t,
@@ -131,16 +137,16 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 球形线性插值（保持向量方向平滑过渡）
   /// </summary>
   public static Vector3 Slerp(Vector3 a, Vector3 b, float t) {
-    t = Math.Max(0f, Math.Min(1f, t));
+    t = MathF.Max(0f, MathF.Min(1f, t));
 
     float dot = Dot(a.Normalized, b.Normalized);
-    dot = Math.Max(-1f, Math.Min(1f, dot)); // 防止浮点误差
+    dot = MathF.Max(-1f, MathF.Min(1f, dot)); // 防止浮点误差
 
-    float theta = (float)Math.Acos(dot) * t;
+    float theta = MathF.Acos(dot) * t;
     Vector3 relativeVec = b - a * dot;
     relativeVec.Normalize();
 
-    return ((a * (float)Math.Cos(theta)) + (relativeVec * (float)Math.Sin(theta))) *
+    return ((a * MathF.Cos(theta)) + (relativeVec * MathF.Sin(theta))) *
            MathUtils.Lerp(a.Magnitude, b.Magnitude, t);
   }
 
@@ -148,8 +154,8 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 平滑阻尼插值（用于相机跟随等平滑移动）
   /// </summary>
   public static Vector3 SmoothDamp(Vector3 current, Vector3 target, ref Vector3 currentVelocity, float smoothTime, float maxSpeed = float.PositiveInfinity) {
-    float deltaTime = TimeUtils.deltaTime;
-    smoothTime = Math.Max(0.0001f, smoothTime);
+    float deltaTime = TimeUtils.DeltaTime;
+    smoothTime = MathF.Max(0.0001f, smoothTime);
 
     float omega = 2f / smoothTime;
     float x = omega * deltaTime;
@@ -203,7 +209,7 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 向量长度（模）
   /// </summary>
   public float Magnitude {
-    get { return (float)Math.Sqrt(x * x + y * y + z * z); }
+    get { return MathF.Sqrt(x * x + y * y + z * z); }
   }
 
   /// <summary>
@@ -257,12 +263,12 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 计算两个向量之间的角度（弧度）
   /// </summary>
   public static float Angle(Vector3 from, Vector3 to) {
-    float denominator = (float)Math.Sqrt(from.SqrMagnitude * to.SqrMagnitude);
+    float denominator = MathF.Sqrt(from.SqrMagnitude * to.SqrMagnitude);
     if (denominator < float.Epsilon)
       return 0f;
 
     float dot = MathUtils.Clamp(Dot(from, to) / denominator, -1f, 1f);
-    return (float)Math.Acos(dot);
+    return MathF.Acos(dot);
   }
 
   /// <summary>
@@ -323,7 +329,7 @@ public struct Vector3 : IEquatable<Vector3> {
   /// 数除（向量 / 标量）
   /// </summary>
   public static Vector3 operator /(Vector3 a, float scalar) {
-    if (Math.Abs(scalar) < float.Epsilon)
+    if (MathF.Abs(scalar) < float.Epsilon)
       throw new DivideByZeroException("Cannot divide vector by zero");
 
     return new Vector3(a.x / scalar, a.y / scalar, a.z / scalar);

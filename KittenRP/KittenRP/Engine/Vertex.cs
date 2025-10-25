@@ -1,4 +1,6 @@
-﻿namespace KittenRP;
+﻿using KittenRP.Core.Mathematics;
+
+namespace KittenRP.Core.Engine;
 
 /// <summary>
 /// 顶点信息
@@ -13,9 +15,4 @@ public class Vertex {
     TexCoord = texCoord;
     Normal = normal;
   }
-}
-
-
-public class Mesh {
-  pub
 }

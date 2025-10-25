@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using KittenRP.Core.Mathematics;
 
-namespace KittenRP;
+namespace KittenRP.ModelLoader;
 
 public class ObjFileLoader {
   private List<Vector3> _positions = new();

@@ -1,9 +1,16 @@
-﻿namespace KittenRP;
+﻿using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using KittenRP.Core.Mathematics;
+using KittenRP.Core.Utilities;
+
+namespace KittenRP.Core.Engine;
 
 /// <summary>
 /// 颜色类，提供完整的颜色操作功能
 /// 支持RGB、HSV、HSL颜色空间转换，颜色混合，颜色运算等
 /// </summary>
+[PublicAPI]
+[StructLayout(LayoutKind.Sequential)]
 public struct Color : IEquatable<Color> {
   public float r;
   public float g;
@@ -560,6 +567,13 @@ public struct Color : IEquatable<Color> {
 
   public override int GetHashCode() {
     return r.GetHashCode() ^ (g.GetHashCode() << 2) ^ (b.GetHashCode() >> 2) ^ (a.GetHashCode() << 1);
+  }
+  public static bool operator ==(Color left, Color right) {
+    return left.Equals(right);
+  }
+
+  public static bool operator !=(Color left, Color right) {
+    return !(left == right);
   }
 
   #endregion

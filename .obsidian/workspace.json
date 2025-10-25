@@ -171,17 +171,17 @@
   },
   "active": "71f512f65ac18d0b",
   "lastOpenFiles": [
-    "KittenRP/KittenRP/ModelLoader/WavefrontOBJ/ObjFileLoader.cs~",
-    "KittenRP/KittenRP/ModelLoader/WavefrontOBJ/ObjFileLoader.cs",
-    "KittenRP/KittenRP/ModelLoader/WavefrontOBJ/OBJModelLoader.cs",
-    "KittenRP/KittenRP/ModelLoader/WavefrontOBJ",
-    "KittenRP/KittenRP/ModelLoader/OBJ/OBJModelLoader.cs",
-    "KittenRP/KittenRP/ModelLoader/OBJ",
-    "KittenRP/KittenRP/Core/Color/ColorAdjustment.cs",
-    "KittenRP/KittenRP/Core/Color/ColorBlender.cs",
-    "KittenRP/KittenRP/Core/Color/ColorSpace.cs",
-    "KittenRP/KittenRP/Core/Color/Color.cs",
-    "KittenRP/KittenRP/Core/Color",
+    "KittenRP/KittenRP/GUI/Exceptions/ErrorCodes.cs",
+    "KittenRP/KittenRP/GUI/Exceptions",
+    "KittenRP/KittenRP/GUI/Exception/ErrorCodes.cs",
+    "KittenRP/KittenRP/GUI/Exception",
+    "KittenRP/KittenRP/GUI/KittenRPWindow.cs",
+    "KittenRP/KittenRP/GUI",
+    "KittenRP/KittenRP/Window/KittenRPWindow.cs",
+    "KittenRP/KittenRP/Core/Utilities/ReflectionUtils.cs",
+    "KittenRP/KittenRP/Core/ErrorMessages.zh.resx",
+    "KittenRP/KittenRP/Core/ErrorMessages.en.resx",
+    "KittenRP/KittenRP/Core/ErrorMessages.Designer.cs",
     "参考资料/数学/插值.md"
   ]
 }

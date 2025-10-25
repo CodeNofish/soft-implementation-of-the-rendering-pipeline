@@ -1,8 +1,14 @@
-﻿namespace KittenRP;
+﻿using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using KittenRP.Core.Utilities;
+
+namespace KittenRP.Core.Mathematics;
 
 /// <summary>
 /// 二维向量
 /// </summary>
+[PublicAPI]
+[StructLayout(LayoutKind.Sequential)]
 public struct Vector2 : IEquatable<Vector2> {
   public float x;
   public float y;

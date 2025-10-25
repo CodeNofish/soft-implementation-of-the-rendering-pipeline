@@ -1,7 +1,9 @@
 ﻿using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 
-namespace KittenRP;
+namespace KittenRP.Core.Utilities;
 
+[PublicAPI]
 public static class MathUtils {
   public const float PI = MathF.PI;
   public const float Deg2Rad = PI / 180f;

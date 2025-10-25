@@ -1,8 +1,14 @@
-﻿namespace KittenRP;
+﻿using System.Runtime.InteropServices;
+using JetBrains.Annotations;
+using KittenRP.Core.Utilities;
+
+namespace KittenRP.Core.Mathematics;
 
 /// <summary>
 /// 四维向量
 /// </summary>
+[PublicAPI]
+[StructLayout(LayoutKind.Sequential)]
 public struct Vector4 : IEquatable<Vector4> {
   public float x;
   public float y;
@@ -52,7 +58,7 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 将齐次坐标转换为3D坐标（透视除法）
   /// </summary>
   public Vector3 HomogeneousTo3D() {
-    if (Math.Abs(w) < float.Epsilon)
+    if (MathF.Abs(w) < float.Epsilon)
       return new Vector3(x, y, z);
 
     return new Vector3(x / w, y / w, z / w);
@@ -149,9 +155,9 @@ public struct Vector4 : IEquatable<Vector4> {
   /// </summary>
   public Vector4 GammaToLinear() {
     return new Vector4(
-      (float)Math.Pow(r, 2.2f),
-      (float)Math.Pow(g, 2.2f),
-      (float)Math.Pow(b, 2.2f),
+      MathF.Pow(r, 2.2f),
+      MathF.Pow(g, 2.2f),
+      MathF.Pow(b, 2.2f),
       a
     );
   }
@@ -161,9 +167,9 @@ public struct Vector4 : IEquatable<Vector4> {
   /// </summary>
   public Vector4 LinearToGamma() {
     return new Vector4(
-      (float)Math.Pow(r, 1f / 2.2f),
-      (float)Math.Pow(g, 1f / 2.2f),
-      (float)Math.Pow(b, 1f / 2.2f),
+      MathF.Pow(r, 1f / 2.2f),
+      MathF.Pow(g, 1f / 2.2f),
+      MathF.Pow(b, 1f / 2.2f),
       a
     );
   }
@@ -199,10 +205,10 @@ public struct Vector4 : IEquatable<Vector4> {
   /// </summary>
   public Vector4 ClampColor() {
     return new Vector4(
-      Math.Max(0f, Math.Min(1f, r)),
-      Math.Max(0f, Math.Min(1f, g)),
-      Math.Max(0f, Math.Min(1f, b)),
-      Math.Max(0f, Math.Min(1f, a))
+      MathF.Max(0f, MathF.Min(1f, r)),
+      MathF.Max(0f, MathF.Min(1f, g)),
+      MathF.Max(0f, MathF.Min(1f, b)),
+      MathF.Max(0f, MathF.Min(1f, a))
     );
   }
 
@@ -210,31 +216,31 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 判断向量是否近似相等（考虑浮点误差）
   /// </summary>
   public static bool Approximately(Vector4 a, Vector4 b, float tolerance = 0.0001f) {
-    return Math.Abs(a.x - b.x) < tolerance &&
-           Math.Abs(a.y - b.y) < tolerance &&
-           Math.Abs(a.z - b.z) < tolerance &&
-           Math.Abs(a.w - b.w) < tolerance;
+    return MathF.Abs(a.x - b.x) < tolerance &&
+           MathF.Abs(a.y - b.y) < tolerance &&
+           MathF.Abs(a.z - b.z) < tolerance &&
+           MathF.Abs(a.w - b.w) < tolerance;
   }
 
   /// <summary>
   /// 判断是否为有效的齐次坐标（w != 0）
   /// </summary>
   public bool IsValidHomogeneous() {
-    return Math.Abs(w) > float.Epsilon;
+    return MathF.Abs(w) > float.Epsilon;
   }
 
   /// <summary>
   /// 判断是否为方向向量（w == 0）
   /// </summary>
   public bool IsDirection() {
-    return Math.Abs(w) < float.Epsilon;
+    return MathF.Abs(w) < float.Epsilon;
   }
 
   /// <summary>
   /// 判断是否为位置向量（w == 1）
   /// </summary>
   public bool IsPosition() {
-    return Math.Abs(w - 1f) < float.Epsilon;
+    return MathF.Abs(w - 1f) < float.Epsilon;
   }
 
   #endregion
@@ -249,7 +255,7 @@ public struct Vector4 : IEquatable<Vector4> {
   /// <param name="b">结束点</param>
   /// <param name="t">插值系数 [0,1]</param>
   public static Vector4 Lerp(Vector4 a, Vector4 b, float t) {
-    t = Math.Max(0f, Math.Min(1f, t)); // 限制t在[0,1]范围内
+    t = MathF.Max(0f, MathF.Min(1f, t)); // 限制t在[0,1]范围内
     return new Vector4(
       a.x + (b.x - a.x) * t,
       a.y + (b.y - a.y) * t,
@@ -274,16 +280,16 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 球形线性插值（保持向量方向平滑过渡）
   /// </summary>
   public static Vector4 Slerp(Vector4 a, Vector4 b, float t) {
-    t = Math.Max(0f, Math.Min(1f, t));
+    t = MathF.Max(0f, MathF.Min(1f, t));
 
     float dot = Dot(a.Normalized, b.Normalized);
-    dot = Math.Max(-1f, Math.Min(1f, dot)); // 防止浮点误差
+    dot = MathF.Max(-1f, MathF.Min(1f, dot)); // 防止浮点误差
 
-    float theta = (float)Math.Acos(dot) * t;
+    float theta = MathF.Acos(dot) * t;
     Vector4 relativeVec = b - a * dot;
     relativeVec.Normalize();
 
-    return ((a * (float)Math.Cos(theta)) + (relativeVec * (float)Math.Sin(theta))) *
+    return ((a * MathF.Cos(theta)) + (relativeVec * MathF.Sin(theta))) *
            MathUtils.Lerp(a.Magnitude, b.Magnitude, t);
   }
 
@@ -303,7 +309,7 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 向量长度（模）
   /// </summary>
   public float Magnitude {
-    get { return (float)Math.Sqrt(x * x + y * y + z * z + w * w); }
+    get { return MathF.Sqrt(x * x + y * y + z * z + w * w); }
   }
 
   /// <summary>
@@ -358,12 +364,12 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 计算两个向量之间的角度（弧度）
   /// </summary>
   public static float Angle(Vector4 from, Vector4 to) {
-    float denominator = (float)Math.Sqrt(from.SqrMagnitude * to.SqrMagnitude);
+    float denominator = MathF.Sqrt(from.SqrMagnitude * to.SqrMagnitude);
     if (denominator < float.Epsilon)
       return 0f;
 
     float dot = MathUtils.Clamp(Dot(from, to) / denominator, -1f, 1f);
-    return (float)Math.Acos(dot);
+    return MathF.Acos(dot);
   }
 
   /// <summary>
@@ -424,7 +430,7 @@ public struct Vector4 : IEquatable<Vector4> {
   /// 数除（向量 / 标量）
   /// </summary>
   public static Vector4 operator /(Vector4 a, float scalar) {
-    if (Math.Abs(scalar) < float.Epsilon)
+    if (MathF.Abs(scalar) < float.Epsilon)
       throw new DivideByZeroException("Cannot divide vector by zero");
 
     return new Vector4(a.x / scalar, a.y / scalar, a.z / scalar, a.w / scalar);
